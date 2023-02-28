@@ -1,4 +1,4 @@
-import 'package:admission_friend/home.dart';
+import 'package:admission_friend/screens/onboarding.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,12 +11,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       title: 'Admission friend',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
+        primaryColor: const Color(0xff3b1791),
+        // primarySwatch: Color.fromARGB(255, 220, 4, 220),
       ),
-      home: const HomePage(),
+      home: const ConcentricAnimationOnboarding(),
     );
   }
 }
