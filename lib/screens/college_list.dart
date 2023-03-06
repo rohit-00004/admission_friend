@@ -2,14 +2,16 @@ import 'package:admission_friend/screens/state_level.dart';
 import 'package:flutter/material.dart';
 
 class CollegeList extends StatelessWidget {
-  const CollegeList({super.key});
+  final int rank;
+  final List<String> selections;
+  CollegeList({required this.rank, required this.selections, super.key});
 
-  final pages = const [
+  final pages =  [
     // Icon(Icons.directions_car),
-    StateLevel(),
-    Icon(Icons.directions_transit),
-    Icon(Icons.directions_bike),
-    Icon(Icons.directions_boat),
+    // StateLevel(rank: rank),
+    const Icon(Icons.directions_transit),
+    const Icon(Icons.directions_bike),
+    const Icon(Icons.directions_boat),
   ];
 
 
@@ -39,7 +41,12 @@ class CollegeList extends StatelessWidget {
             ),
         ),
         body: TabBarView(
-          children: pages,
+          children: [
+            StateLevel(rank: rank, selections: selections,),
+            const Icon(Icons.directions_transit),
+            const Icon(Icons.directions_bike),
+            const Icon(Icons.directions_boat),
+          ]
         ),
         // body: 
       ),
