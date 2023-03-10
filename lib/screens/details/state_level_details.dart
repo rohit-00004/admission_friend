@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BranchInfo extends StatelessWidget {
-  final StateLevel scorelist;
+  final dynamic scorelist;
   late Map<String, dynamic> mp;
   List<dynamic> todisplay = [];
   final DatabaseHelper db;
@@ -14,11 +14,11 @@ class BranchInfo extends StatelessWidget {
   }
 
   void init() {
-    mp = scorelist.toJson();
-    mp.forEach((key, value) {
-      todisplay.add(value);
-    });
-    // var ls = mp.map((key, value) => )
+      mp = scorelist.toJson();
+      mp.forEach((key, value) {
+        todisplay.add(value);
+      });
+      // var ls = mp.map((key, value) => )
     mp.remove("branchcode");
   }
 
@@ -54,7 +54,6 @@ class BranchInfo extends StatelessWidget {
                   DatabaseHelper.getBranchName(scorelist.branchcode),
                   style: GoogleFonts.robotoMono(
                     fontSize: 20,
-                    // letterSpacing: 1.5,
                     fontWeight: FontWeight.w600
                   )
                       // const TextStyle(fontWeight: FontWeight.bold, fontSize: 20,),

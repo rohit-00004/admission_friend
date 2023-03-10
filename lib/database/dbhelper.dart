@@ -1,15 +1,24 @@
+import 'package:admission_friend/models/home_to_home_model.dart';
 import 'package:admission_friend/models/state_level.dart';
 import 'package:csv/csv.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 
+import '../models/other_to_other_model.dart';
+
 class DatabaseHelper {
   Database? _db;
-
+  // static final DatabaseHelper instance = DatabaseHelper._init();
+  // DatabaseHelper._init();
   DatabaseHelper() {
-    // _initdb();
+    print("dbhelper constructor");
+    _initdb();
+    // insertcolleges();
+    // insertStatelevel();
+    // insertHometoHome();
   }
 
   Future<Database?> database() async {
@@ -24,10 +33,13 @@ class DatabaseHelper {
   }
 
   Future<Database> _initdb() async {
+    print("_initDB");
     // Open the database
-    return await openDatabase(join(await getDatabasesPath(), 'mhtcet.db'),
-        version: 1, onCreate: _onCreate
-        );
+    return _db = await openDatabase(join(await getDatabasesPath(), 'mhtcet.db'),
+        version: 1, 
+        onCreate: _onCreate, 
+        // onUpgrade: _onUpgrade,
+    );
   }
 
   _onCreate(Database db, version) async {
@@ -50,7 +62,7 @@ class DatabaseHelper {
           LVJS INT,
           LNT1S INT,
           LNT2S INT,
-          LNT3 INT,
+          LNT3S INT,
           LOBCS INT,
           PWDOPENS INT,
           DEFOPENS INT,
@@ -73,6 +85,109 @@ class DatabaseHelper {
         );
       '''
     );
+
+    await db.execute(
+      '''
+        CREATE TABLE home_to_home(
+          branchcode VARCHAR(10) PRIMARY KEY,
+          GOPENH INT,
+          GSCH INT,
+          GSTH INT,
+          GVJH INT,
+          GNT1H INT,
+          GNT2H INT,
+          GNT3H INT,
+          GOBCH INT,
+          MI INT,
+          LOPENH INT,
+          LSCH INT,
+          LSTH INT,
+          LVJH INT,
+          LNT1H INT,
+          LNT2H INT,
+          LNT3H INT,
+          LOBCH INT,
+          PWDOPENH INT,
+          DEFOPENH INT,
+          TFWS INT,
+          PWDROBCH INT,
+          DEFROBCH INT,
+          DEFRVJH INT,
+          ORPHAN INT,
+          EWS INT
+        );
+      '''
+    );
+
+    await db.execute(
+      '''
+        CREATE TABLE other_to_other(
+          branchcode VARCHAR(10) PRIMARY KEY,
+          GOPENO INT,
+          GSCO INT,
+          GSTO INT,
+          GVJO INT,
+          GNT1O INT,
+          GNT2O INT,
+          GNT3O INT,
+          GOBCO INT,
+          MI INT,
+          LOPENO INT,
+          LSCO INT,
+          LSTO INT,
+          LVJO INT,
+          LNT1O INT,
+          LNT2O INT,
+          LNT3O INT,
+          LOBCO INT,
+          PWDOPENO INT,
+          DEFOPENO INT,
+          TFWS INT,
+          PWDROBCO INT,
+          DEFROBCO INT,
+          DEFRVJO INT,
+          ORPHAN INT,
+          EWS INT  
+        );
+      '''
+    );
+  }
+
+  _onUpgrade(Database db, oldVersion, newversion) async{
+    print("Upgrading db");
+    await db.execute(
+      '''
+        CREATE TABLE home_to_home(
+          branchcode text,
+          GOPENH INT,
+          GSCH INT,
+          GSTH INT,
+          GVJH INT,
+          GNT1H INT,
+          GNT2H INT,
+          GNT3H INT,
+          GOBCH INT,
+          MI INT,
+          LOPENH INT,
+          LSCH INT,
+          LSTH INT,
+          LVJH INT,
+          LNT1H INT,
+          LNT2H INT,
+          LNT3H INT,
+          LOBCH INT,
+          PWDOPENH INT,
+          DEFOPENH INT,
+          TFWS INT,
+          PWDROBCH INT,
+          DEFROBCH INT,
+          DEFRVJH INT,
+          ORPHAN INT,
+          EWS INT,
+          PRIMARY KEY(branchcode)
+        );
+      '''
+    );
   }
 
   Future<List<List<dynamic>>> importCSVtoDB(String path) async {
@@ -82,9 +197,10 @@ class DatabaseHelper {
     return csvTable;
   }
 
-  Future<void> insertTxn() async {
-    List<List<dynamic>> csvTable = await importCSVtoDB("assets/cutoff.csv");
+  Future<void> insertStatelevel() async {
+    List<List<dynamic>> csvTable = await importCSVtoDB("assets/state_cutoff.csv");
     final db = await database();
+    // final db = instance.database();
 
     try {
       await db!.transaction((txn) async {
@@ -108,7 +224,7 @@ class DatabaseHelper {
               'LVJS': row[13] == "" ? 0 : row[13],
               'LNT1S': row[14] == "" ? 0 : row[14],
               'LNT2S': row[15] == "" ? 0 : row[15],
-              'LNT3': row[16] == "" ? 0 : row[16],
+              'LNT3S': row[16] == "" ? 0 : row[16],
               'LOBCS': row[17] == "" ? 0 : row[17],
               'PWDOPENS': row[18] == "" ? 0 : row[18],
               'DEFOPENS': row[19] == "" ? 0 : row[19],
@@ -123,7 +239,7 @@ class DatabaseHelper {
         }
       });
     } catch (e) {
-      // print(e.toString());
+      print(e.toString());
     }
   }
 
@@ -150,8 +266,109 @@ class DatabaseHelper {
     }
   }
 
-  Future<List<StateLevel>> readstatelevel(
-      int rank, List<String> selections) async {
+  Future<void> insertHometoHome() async {
+    List<List<dynamic>> csvTable = await importCSVtoDB("assets/home_to_home_cutoff.csv");
+    final db = await database();
+
+    if(db != null){
+      try{
+        // await db.transaction((txn) async {
+          // txn.batch().insert('home_to_home', {});
+          var batch = db.batch();
+          for (var row in csvTable) {
+            batch.insert(
+              'home_to_home',
+              {
+                'branchcode': row[0],
+                'GOPENH': row[1] == "" ? 0 : row[1],
+                'GSCH': row[2] == "" ? 0 : row[2],
+                'GSTH': row[3] == "" ? 0 : row[3],
+                'GVJH': row[4] == "" ? 0 : row[4],
+                'GNT1H': row[5] == "" ? 0 : row[5],
+                'GNT2H': row[6] == "" ? 0 : row[6],
+                'GNT3H': row[7] == "" ? 0 : row[7],
+                'GOBCH': row[8] == "" ? 0 : row[8],
+                'MI': row[9] == "" ? 0 : row[9],
+                'LOPENH': row[10] == "" ? 0 : row[10],
+                'LSCH': row[11] == "" ? 0 : row[11],
+                'LSTH': row[12] == "" ? 0 : row[12],
+                'LVJH': row[13] == "" ? 0 : row[13],
+                'LNT1H': row[14] == "" ? 0 : row[14],
+                'LNT2H': row[15] == "" ? 0 : row[15],
+                'LNT3H': row[16] == "" ? 0 : row[16],
+                'LOBCH': row[17] == "" ? 0 : row[17],
+                'PWDOPENH': row[18] == "" ? 0 : row[18],
+                'DEFOPENH': row[19] == "" ? 0 : row[19],
+                'TFWS': row[20] == "" ? 0 : row[20],
+                'PWDROBCH': row[21] == "" ? 0 : row[21],
+                'DEFROBCH': row[22] == "" ? 0 : row[22],
+                'DEFRVJH': row[23] == "" ? 0 : row[23],
+                'ORPHAN': row[24] == "" ? 0 : row[24],
+                'EWS': row[25] == "" ? 0 : row[25],
+              },
+            );
+          }
+          await batch.commit(continueOnError: true, noResult: true);
+          // print("inserted home_to_home");
+        // });
+      }
+      catch(e){
+        // print('home_to_home insertion error: ${e.toString()}');
+      }
+    }
+  }
+
+  Future<void> insertOthertoOther() async {
+    List<List<dynamic>> csvTable = await importCSVtoDB("assets/other_to_other_cutoff.csv");
+    final db = await database();
+
+    if(db != null){
+      try{
+          var batch = db.batch();
+          for (var row in csvTable) {
+            batch.insert(
+              'other_to_other',
+              {
+                'branchcode': row[0],
+                'GOPENO': row[1] == "" ? 0 : row[1],
+                'GSCO': row[2] == "" ? 0 : row[2],
+                'GSTO': row[3] == "" ? 0 : row[3],
+                'GVJO': row[4] == "" ? 0 : row[4],
+                'GNT1O': row[5] == "" ? 0 : row[5],
+                'GNT2O': row[6] == "" ? 0 : row[6],
+                'GNT3O': row[7] == "" ? 0 : row[7],
+                'GOBCO': row[8] == "" ? 0 : row[8],
+                'MI': row[9] == "" ? 0 : row[9],
+                'LOPENO': row[10] == "" ? 0 : row[10],
+                'LSCO': row[11] == "" ? 0 : row[11],
+                'LSTO': row[12] == "" ? 0 : row[12],
+                'LVJO': row[13] == "" ? 0 : row[13],
+                'LNT1O': row[14] == "" ? 0 : row[14],
+                'LNT2O': row[15] == "" ? 0 : row[15],
+                'LNT3O': row[16] == "" ? 0 : row[16],
+                'LOBCO': row[17] == "" ? 0 : row[17],
+                'PWDOPENO': row[18] == "" ? 0 : row[18],
+                'DEFOPENO': row[19] == "" ? 0 : row[19],
+                'TFWS': row[20] == "" ? 0 : row[20],
+                'PWDROBCO': row[21] == "" ? 0 : row[21],
+                'DEFROBCO': row[22] == "" ? 0 : row[22],
+                'DEFRVJO': row[23] == "" ? 0 : row[23],
+                'ORPHAN': row[24] == "" ? 0 : row[24],
+                'EWS': row[25] == "" ? 0 : row[25],
+              },
+            );
+          }
+          await batch.commit(continueOnError: true, noResult: true);
+          // print("inserted home_to_home");
+        // });
+      }
+      catch(e){
+        // print('home_to_home insertion error: ${e.toString()}');
+      }
+    }
+  }
+
+  Future<List<StateLevel>> readstatelevel(int rank, List<String> selections) async {
     final db = await database();
 
     String category = selections[1];
@@ -159,9 +376,9 @@ class DatabaseHelper {
 
     String query = "";
     if (category != "EWS" && category != 'TFWS') {
-      if (category != "LNT3") {
+      // if (category != "LNT3") {
         category += 'S';
-      }
+      // }
       if (selections[0] == 'Male') {
         query += 'G';
       } else {
@@ -195,6 +412,119 @@ class DatabaseHelper {
       List<StateLevel> ret = [];
       for (var e in lists) {
         ret.add(StateLevel.fromJson(e));
+        // print(StateLevel.fromJson(e).toJson());
+      }
+      return ret;
+    }
+
+    return [];
+  }
+
+  Future<List<HometoHome>> readhometohome(
+      int rank, List<String> selections) async {
+    final db = await database();
+
+    String category = selections[1];
+    category = category.toUpperCase();
+
+    String query = "";
+    if (category != "EWS" && category != 'TFWS') {
+      // if (category != "LNT3") {
+        category += 'H';
+      // }
+      if (selections[0] == 'Male') {
+        query += 'G';
+      } else {
+        query += 'L';
+      }
+      query += category;
+    } else {
+      query = category;
+    }
+
+    print("query hometohome: $query");
+    if (db != null) {
+      List<Map<String, Object?>> lists = [];
+     
+      if (rank - 50 > 0) {
+        lists = await db.rawQuery('''
+          SELECT * from home_to_home 
+          WHERE $query > ? 
+          ORDER BY $query
+          LIMIT 10
+          ''', [rank - 50]);
+      } else {
+        lists = await db.rawQuery('''
+          SELECT * from home_to_home 
+          WHERE $query > ? AND $query > ?
+          ORDER BY $query
+          LIMIT 10
+          ''', [rank, 0]);
+      }
+
+      List<HometoHome> ret = [];
+      for (var e in lists) {
+        ret.add(HometoHome.fromJson(e));
+        // print(StateLevel.fromJson(e).toJson());
+      }
+      return ret;
+    }
+
+    return [];
+  }
+
+    Future<List<dynamic>> readtable(
+      int rank, List<String> selections, String table) async {
+    final db = await database();
+
+    String category = selections[1];
+    category = category.toUpperCase();
+
+    String query = "";
+    if (category != "EWS" && category != 'TFWS') {
+      // if (category != "LNT3") {
+        table == "state_level" ?
+        category += 'S' : table == "other_to_other" ? category += 'O' : category += 'H';
+      // }
+      if (selections[0] == 'Male') {
+        query += 'G';
+      } else {
+        query += 'L';
+      }
+      query += category;
+    } else {
+      query = category;
+    }
+
+    print("query: $query");
+    if (db != null) {
+      List<Map<String, Object?>> lists = [];
+
+      if (rank - 50 > 0) {
+        lists = await db.rawQuery(
+          '''
+          SELECT * from $table
+          WHERE $query > ?
+          ORDER by $query
+          LIMIT 10
+          ''', [rank-50]);
+      } else {
+        lists = await db.rawQuery('''
+          SELECT * from $table 
+          WHERE $query > ? AND $query > ?
+          ORDER BY $query
+          LIMIT 10
+          ''', [rank, 0]);
+      }
+
+      List<dynamic> ret = [];
+      // print(lists);
+      for (var e in lists) {
+        table == "state_level" ? 
+        ret.add(StateLevel.fromJson(e)) : 
+        table == "other_to_other" ? 
+        ret.add(OthertoOther.fromJson(e)) : 
+        ret.add(HometoHome.fromJson(e));
         // print(StateLevel.fromJson(e).toJson());
       }
       return ret;
@@ -291,6 +621,34 @@ class DatabaseHelper {
       
       case "921":
         return "Artificial Intelligence and Machine Learning";
+      
+      case "370":
+        return "Electronics and Communication Engineering";
+
+      case "900":
+        return "Electronics and Computer Science";
+      
+      case "910":
+        return "Computer Science and Engineering(Cyber Security)";
+      
+      case "904":
+        return "Chemical Engineering";
+      
+      case "511":
+        return "Dyestuff Technology";
+      
+      case "896":
+        return "Textile Technology";
+
+      case "512":
+        return "Oil,Oleochemicals and Surfactants Technology";
+
+      case "514":
+        return "Fibres and Textile Processing Technology";
+      
+      case "519":
+        return "Polymer Engineering and Technology";
+        
       default:
         break;
     }

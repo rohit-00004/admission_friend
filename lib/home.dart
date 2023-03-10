@@ -1,10 +1,14 @@
+import 'package:admission_friend/database/dbhelper.dart';
 import 'package:admission_friend/screens/college_list.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 List<String> selections = ["Male", "OPEN"];
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+
+  final DatabaseHelper db;
+  const HomePage({required this.db, super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -88,7 +92,7 @@ class _HomePageState extends State<HomePage> {
               ),  
               onPressed: () {
                 if(_formKey.currentState!.validate()){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) =>   CollegeList(rank: int.parse(rankcontroller.text), selections: selections,)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) =>   CollegeList(rank: int.parse(rankcontroller.text), selections: selections, db: widget.db,)));
                 }
                },
               child: const Text('Submit'),

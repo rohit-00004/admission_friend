@@ -15,7 +15,7 @@ class StateLevelFields {
   static String lvjs = "LVJS";
   static String lnt1s = "LNT1S";
   static String lnt2s = "LNT2S";
-  static String lnt3 = "LNT3";
+  static String lnt3s = "LNT3S";
   static String lobcs = "LOBCS";
   static String pwdopens = "PWDOPENS";
   static String defopens = "DEFOPENS";
@@ -44,7 +44,7 @@ class StateLevel {
       lvjs,
       lnt1s,
       lnt2s,
-      lnt3,
+      lnt3s,
       lobcs,
       pwdopens,
       defopens,
@@ -72,7 +72,7 @@ class StateLevel {
       required this.lvjs,
       required this.lnt1s,
       required this.lnt2s,
-      required this.lnt3,
+      required this.lnt3s,
       required this.lobcs,
       required this.pwdopens,
       required this.defopens,
@@ -101,7 +101,7 @@ class StateLevel {
       lvjs: json[StateLevelFields.lvjs],
       lnt1s: json[StateLevelFields.lnt1s],
       lnt2s: json[StateLevelFields.lnt2s],
-      lnt3: json[StateLevelFields.lnt3],
+      lnt3s: json[StateLevelFields.lnt3s],
       lobcs: json[StateLevelFields.lobcs],
       pwdopens: json[StateLevelFields.pwdopens],
       defopens: json[StateLevelFields.defopens],
@@ -132,7 +132,7 @@ class StateLevel {
       StateLevelFields.lvjs: lvjs,
       StateLevelFields.lnt1s: lnt1s,
       StateLevelFields.lnt2s: lnt2s,
-      StateLevelFields.lnt3: lnt3,
+      StateLevelFields.lnt3s: lnt3s,
       StateLevelFields.lobcs: lobcs,
       StateLevelFields.pwdopens: pwdopens,
       StateLevelFields.defopens: defopens,

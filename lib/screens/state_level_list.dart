@@ -9,7 +9,8 @@ import '../widgets/simple_list.dart';
 class StateLevel extends StatefulWidget {
   final int rank;
   final List<String> selections;
-  const StateLevel({required this.rank, required this.selections, super.key});
+  final DatabaseHelper db;
+  const StateLevel({required this.rank, required this.selections, required this.db, super.key});
 
   @override
   State<StateLevel> createState() => _StateLevelState();
@@ -18,13 +19,18 @@ class StateLevel extends StatefulWidget {
 class _StateLevelState extends State<StateLevel> {
 
   late DatabaseHelper db;
+
   @override
   void initState() {
-    db = DatabaseHelper();
-    db.insertTxn();
-    db.insertcolleges();
+    db = widget.db;
+    // db = DatabaseHelper();  
+    // db.insertStatelevel();
+    // db.insertcolleges();
+    // db.insertHometoHome();
     super.initState();
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +65,7 @@ class _StateLevelState extends State<StateLevel> {
               ),
             ],
           ),
-          const SizedBox(height: 10,),
+          const SizedBox(height: 5,),
       
           // ElevatedButton(onPressed: (){
           //   db.insertTxn();
@@ -68,11 +74,14 @@ class _StateLevelState extends State<StateLevel> {
           // child: const Text('insert db')),
       
           const Divider(height: 10, thickness: 1, color: Colors.black,),
+          const SizedBox(height: 5,),
       
           FutureBuilder(
             future: db.readstatelevel(widget.rank, widget.selections),
             builder: ((context, snapshot) {
+              
               if(snapshot.hasData){
+                // setState(() {});
                 // print("selections: $selections");
                 return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -85,7 +94,7 @@ class _StateLevelState extends State<StateLevel> {
                       shrinkWrap: true,
                       itemCount: snapshot.data!.length,
                       itemBuilder: ((context, index) {
-                        // here show for selected category 
+                        // here show for selected category
                         int? score;
                         switch (selections[1]) {
                           case 'OPEN':
@@ -141,7 +150,7 @@ class _StateLevelState extends State<StateLevel> {
                               score = snapshot.data![index].gnt2s;
                             }
                             else {
-                              score = snapshot.data![index].lnt3;
+                              score = snapshot.data![index].lnt3s;
                             }
                             break;
                           case 'NT3':
@@ -149,7 +158,7 @@ class _StateLevelState extends State<StateLevel> {
                               score = snapshot.data![index].gnt3s;
                             }
                             else {
-                              score = snapshot.data![index].lnt3;
+                              score = snapshot.data![index].lnt3s;
                             }
                             break;
 
@@ -205,7 +214,13 @@ class _StateLevelState extends State<StateLevel> {
               return const CircularProgressIndicator();
           }))
         ],),
-      )
+      ), 
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {});
+        },
+        child: Icon(Icons.refresh),
+      ),
     );
   }
 }
