@@ -112,16 +112,16 @@ class _AllLevelState extends State<AllLevel> {
                             if(selections[0] == 'Male'){
                               table == "state_level" ?
                               score = snapshot.data![index].gopens : 
-                              table == "other_to_other" ?
-                              score = out.gopeno : 
-                              score = out.gopenh;
+                              table == "home_to_home" ?
+                              score = out.gopenh :
+                              score = out.gopeno; 
                             }
                             else {
                               table == "state_level" ?
                               score = snapshot.data![index].lopens : 
-                              table == "other_to_other" ?
-                              score = out.lopeno : 
-                              score = out.lopenh;
+                              table == "home_to_home" ?
+                              score = out.lopenh :
+                              score = out.lopeno; 
                             }
                             break;
 
@@ -129,96 +129,96 @@ class _AllLevelState extends State<AllLevel> {
                             if(selections[0] == 'Male'){
                               table == "state_level" ?
                               score = snapshot.data![index].gobcs : 
-                              table == "other_to_other" ?
-                              score = out.gobco : 
-                              score = out.gobch;
+                              table == "home_to_home" ?
+                              score = out.gobch :
+                              score = out.gobco ; 
                             }
                             else {
                               table == "state_level" ?
                               score = snapshot.data![index].lobcs : 
-                              table == "other_to_other" ?
-                              score = out.lobco : 
-                              score = out.lobch;
+                              table == "home_to_home" ?
+                              score = out.lobch :
+                              score = out.lobco; 
                             }
                             break;
                           case 'SC':
                             if(selections[0] == 'Male'){
                               table == "state_level" ?
                               score = snapshot.data![index].gscs : 
-                              table == "other_to_other" ?
-                              score = out.gsco : 
-                              score = out.gsch;
+                              table == "home_to_home" ?
+                              score = out.gsch :
+                              score = out.gsco;
                             }
                             else {
                               table == "state_level" ?
                               score = snapshot.data![index].lscs : 
-                              table == "other_to_other" ?
-                              score = out.lsco : 
-                              score = out.lsch;
+                              table == "home_to_home" ?
+                              score = out.lsch :
+                              score = out.lsco; 
                             }
                             break;
                           case 'VJ':
                             if(selections[0] == 'Male'){
                               table == "state_level" ?
                               score = snapshot.data![index].gvjs : 
-                              table == "other_to_other" ?
-                              score = out.gvjo : 
-                              score = out.gvjh;
+                              table == "home_to_home" ?
+                              score = out.gvjh :
+                              score = out.gvjo; 
                             }
                             else {
                               table == "state_level" ?
                               score = snapshot.data![index].lvjs : 
-                              table == "other_to_other" ?
-                              score = out.lvjo : 
-                              score = out.lvjh;
+                              table == "home_to_home" ?
+                              score = out.lvjh :
+                              score = out.lvjo ;
                             }
                             break;
                           case 'ST':
                             if(selections[0] == 'Male'){
                               table == "state_level" ?
                               score = snapshot.data![index].gsts : 
-                              table == "other_to_other" ?
-                              score = out.gsto : 
-                              score = out.gsth;
+                              table == "home_to_home" ?
+                              score = out.gsth :
+                              score = out.gsto; 
                             }
                             else {
                               table == "state_level" ?
                               score = snapshot.data![index].lsts : 
-                              table == "other_to_other" ?
-                              score = out.lsto : 
-                              score = out.lsth;
+                              table == "home_to_home" ?
+                              score = out.lsth :
+                              score = out.lsto; 
                             }
                             break;
                           case 'NT1':
                             if(selections[0] == 'Male'){
                               table == "state_level" ?
                               score = snapshot.data![index].gnt1s : 
-                              table == "other_to_other" ?
-                              score = out.gnt1o : 
-                              score = out.gnt1o;
+                              table == "home_to_home" ?
+                              score = out.gnt1h :
+                              score = out.gnt1o; 
                             }
                             else {
                               table == "state_level" ?
                               score = snapshot.data![index].lnt1s : 
-                              table == "other_to_other" ?
-                              score = out.lnt1o : 
-                              score = out.lnt1o;
+                              table == "home_to_home" ?
+                              score = out.lnt1h :
+                              score = out.lnt1o ; 
                             }
                             break;
                           case 'NT2':
                             if(selections[0] == 'Male'){
                               table == "state_level" ?
                               score = snapshot.data![index].gnt2s : 
-                              table == "other_to_other" ?
-                              score = out.gnt2o : 
+                              table == "home_to_home" ?
+                              score = out.gnt2h :
                               score = out.gnt2o;
                             }
                             else {
                               table == "state_level" ?
                               score = snapshot.data![index].lnt2s : 
-                              table == "other_to_other" ?
-                              score = out.lnt2o : 
-                              score = out.lnt2o;
+                              table == "home_to_home" ?
+                              score = out.lnt2h :
+                              score = out.lnt2o ; 
                             }
                             break;
 
@@ -226,16 +226,16 @@ class _AllLevelState extends State<AllLevel> {
                             if(selections[0] == 'Male'){
                               table == "state_level" ?
                               score = snapshot.data![index].gnt3s : 
-                              table == "other_to_other" ?
-                              score = out.gnt3o : 
-                              score = out.gnt3o;
+                              table == "home_to_home" ?
+                              score = out.gnt3h :
+                              score = out.gnt3o ;
                             }
                             else {
                               table == "state_level" ?
                               score = snapshot.data![index].lnt3s : 
-                              table == "other_to_other" ?
-                              score = out.lnt3o : 
-                              score = out.lnt3o;
+                              table == "home_to_home" ?
+                              score = out.lnt3h :
+                              score = out.lnt3o; 
                             }
                             break;
 

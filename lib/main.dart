@@ -7,6 +7,7 @@ void main() {
   runApp( MyApp());
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   late DatabaseHelper db;
   
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
     db.insertcolleges();
     db.insertStatelevel();
     db.insertHometoHome();
-    db.insertOthertoOther();
+    db.insertOthertoOther("assets/other_to_other_cutoff.csv", 'other_to_other');
+    db.insertOthertoOther("assets/other_to_home_cutoff.csv", 'other_to_home');
   }
 
   @override

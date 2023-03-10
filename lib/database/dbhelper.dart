@@ -151,40 +151,36 @@ class DatabaseHelper {
         );
       '''
     );
-  }
 
-  _onUpgrade(Database db, oldVersion, newversion) async{
-    print("Upgrading db");
     await db.execute(
       '''
-        CREATE TABLE home_to_home(
-          branchcode text,
-          GOPENH INT,
-          GSCH INT,
-          GSTH INT,
-          GVJH INT,
-          GNT1H INT,
-          GNT2H INT,
-          GNT3H INT,
-          GOBCH INT,
+        CREATE TABLE other_to_home(
+          branchcode VARCHAR(10) PRIMARY KEY,
+          GOPENO INT,
+          GSCO INT,
+          GSTO INT,
+          GVJO INT,
+          GNT1O INT,
+          GNT2O INT,
+          GNT3O INT,
+          GOBCO INT,
           MI INT,
-          LOPENH INT,
-          LSCH INT,
-          LSTH INT,
-          LVJH INT,
-          LNT1H INT,
-          LNT2H INT,
-          LNT3H INT,
-          LOBCH INT,
-          PWDOPENH INT,
-          DEFOPENH INT,
+          LOPENO INT,
+          LSCO INT,
+          LSTO INT,
+          LVJO INT,
+          LNT1O INT,
+          LNT2O INT,
+          LNT3O INT,
+          LOBCO INT,
+          PWDOPENO INT,
+          DEFOPENO INT,
           TFWS INT,
-          PWDROBCH INT,
-          DEFROBCH INT,
-          DEFRVJH INT,
+          PWDROBCO INT,
+          DEFROBCO INT,
+          DEFRVJO INT,
           ORPHAN INT,
-          EWS INT,
-          PRIMARY KEY(branchcode)
+          EWS INT  
         );
       '''
     );
@@ -318,8 +314,8 @@ class DatabaseHelper {
     }
   }
 
-  Future<void> insertOthertoOther() async {
-    List<List<dynamic>> csvTable = await importCSVtoDB("assets/other_to_other_cutoff.csv");
+  Future<void> insertOthertoOther(String path, String table) async {
+    List<List<dynamic>> csvTable = await importCSVtoDB(path);
     final db = await database();
 
     if(db != null){
@@ -327,7 +323,7 @@ class DatabaseHelper {
           var batch = db.batch();
           for (var row in csvTable) {
             batch.insert(
-              'other_to_other',
+              table,
               {
                 'branchcode': row[0],
                 'GOPENO': row[1] == "" ? 0 : row[1],
@@ -484,7 +480,7 @@ class DatabaseHelper {
     if (category != "EWS" && category != 'TFWS') {
       // if (category != "LNT3") {
         table == "state_level" ?
-        category += 'S' : table == "other_to_other" ? category += 'O' : category += 'H';
+        category += 'S' : table == "home_to_home" ? category += 'H' : category += 'O' ;
       // }
       if (selections[0] == 'Male') {
         query += 'G';
@@ -522,9 +518,9 @@ class DatabaseHelper {
       for (var e in lists) {
         table == "state_level" ? 
         ret.add(StateLevel.fromJson(e)) : 
-        table == "other_to_other" ? 
-        ret.add(OthertoOther.fromJson(e)) : 
-        ret.add(HometoHome.fromJson(e));
+        table == "home_to_home" ? 
+        ret.add(HometoHome.fromJson(e)) :
+        ret.add(OthertoOther.fromJson(e)) ; 
         // print(StateLevel.fromJson(e).toJson());
       }
       return ret;

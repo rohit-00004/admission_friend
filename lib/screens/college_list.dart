@@ -53,7 +53,8 @@ class CollegeList extends StatelessWidget {
             AllLevel(rank: rank, selections: selections, table: "home_to_home", db: db,),
             AllLevel(rank: rank, selections: selections, table: "other_to_other", db: db,),
             // const Icon(Icons.directions_transit),
-            const Icon(Icons.directions_bike),
+            // const Icon(Icons.directions_bike),
+            AllLevel(rank: rank, selections: selections, table: "other_to_home", db: db)
             // const Icon(Icons.directions_boat),
             // HometoHomeList(rank: rank, selections: selections, db: db)
           ]
