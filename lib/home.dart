@@ -37,71 +37,115 @@ class _HomePageState extends State<HomePage> {
           centerTitle: true,
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        
-      body: Center(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children:  [
-            SizedBox(height: size.height*.03,),
-            Container(
-              width: size.width*.5,
-              decoration: BoxDecoration(
-                border: Border.all(width: 2),
-                borderRadius: BorderRadius.circular(8)),
-              child:  Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: TextFormField(
-                    controller: rankcontroller,
-                    validator: (value) {
-                      if(int.tryParse(value!) == null){
-                        return "Enter a valid rank";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      hintText: 'rank',
-                    ),
-                  ),
-                ),
-            ),
-            SizedBox(height: size.height*.05,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+      drawer: SafeArea(
+        child: Drawer(
+          width: MediaQuery.of(context).size.width * .7,
+          backgroundColor: Theme.of(context).primaryColor,
+          child: DrawerHeader(
+            child: Column(
+
               children: [
-                SizedBox(
-                  width: size.width*.3,
-                  child: DropdownSelection(options: _gender, selected: 'Male'),
-                ),
-                SizedBox(
-                  width: size.width*.3,
-                  child: DropdownSelection(options: _category, selected: 'OPEN'),
-                ),
+                drawerField(const Icon(Icons.person, color: Colors.white,), 'My Profile'),
+
+                // const Divider(thickness: .8, color: Colors.white,),
+                InkWell(
+                  onTap: (){},
+                  child: drawerField(const Icon(Icons.picture_as_pdf_outlined, color: Colors.white,), 'Cutoff for 2021-22')),
+                const Divider(thickness: .8, color: Colors.white,),
+                drawerField(null, 'Round I'),
+                drawerField(null, 'Round II'),
+                drawerField(null, 'Round III'),
+
+                // const Divider(thickness: .8, color: Colors.white,),
+                InkWell(
+                  onTap: (){},
+                  child: drawerField(const Icon(Icons.picture_as_pdf_outlined, color: Colors.white,), 'Cutoff for 2020-21')),
+                const Divider(thickness: .8, color: Colors.white,),
+                drawerField(null, 'Round I'),
+                drawerField(null, 'Round II'),
+                drawerField(null, 'Round III'),
               ],
             ),
-            SizedBox(height: size.height*.1),
-            OutlinedButton(
-              // style: outlineButtonStyle,
-              style: OutlinedButton.styleFrom(
-                shape: const StadiumBorder(),
-                side: const BorderSide(
-                  width: 2,
-                  color: Colors.green
-                ),
-              ),  
-              onPressed: () {
-                if(_formKey.currentState!.validate()){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) =>   CollegeList(rank: int.parse(rankcontroller.text), selections: selections, db: widget.db,)));
-                }
-               },
-              child: const Text('Submit'),
-            )
-            // const SimpleDropDown(),
-          ]),
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children:  [
+              SizedBox(height: size.height*.03,),
+              Container(
+                width: size.width*.5,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2),
+                  borderRadius: BorderRadius.circular(8)),
+                child:  Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: TextFormField(
+                      controller: rankcontroller,
+                      validator: (value) {
+                        if(int.tryParse(value!) == null){
+                          return "Enter a valid rank";
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: 'rank',
+                      ),
+                    ),
+                  ),
+              ),
+              SizedBox(height: size.height*.05,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    width: size.width*.3,
+                    child: DropdownSelection(options: _gender, selected: 'Male'),
+                  ),
+                  SizedBox(
+                    width: size.width*.3,
+                    child: DropdownSelection(options: _category, selected: 'OPEN'),
+                  ),
+                ],
+              ),
+              SizedBox(height: size.height*.1),
+              OutlinedButton(
+                // style: outlineButtonStyle,
+                style: OutlinedButton.styleFrom(
+                  shape: const StadiumBorder(),
+                  side: const BorderSide(
+                    width: 2,
+                    color: Colors.green
+                  ),
+                ),  
+                onPressed: () {
+                  if(_formKey.currentState!.validate()){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>   CollegeList(rank: int.parse(rankcontroller.text), selections: selections, db: widget.db,)));
+                  }
+                 },
+                child: const Text('Submit'),
+              ),
+              Container(
+                height: 300,
+                child: Image.asset('assets/images/students_09.jpg', fit: BoxFit.fitWidth)),
+              // const SimpleDropDown(),
+            ]),
+          ),
         ),
       ),      
     );
+  }
+
+  ListTile drawerField(Icon? icon, String text) {
+    return ListTile(
+                leading: icon,
+                title: Text(text, style: const TextStyle(color: Colors.white),),
+              );
   }
 }
 

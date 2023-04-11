@@ -1,9 +1,16 @@
 import 'package:admission_friend/database/dbhelper.dart';
 import 'package:admission_friend/screens/onboarding.dart';
+import 'package:admission_friend/screens/user_profile.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  //  WidgetsFlutterBinding.ensureInitialized();
+ await Firebase.initializeApp(
+ );
   runApp( MyApp());
 }
 
@@ -22,6 +29,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // const providers = [EmailAuthProvider()];
+    List<AuthProvider<AuthListener, auth.AuthCredential>>?  providers = [EmailAuthProvider()];
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Admission friend',
@@ -30,7 +40,23 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xff3b1791),
         // primarySwatch: Color.fromARGB(255, 220, 4, 220),
       ),
-      home: ConcentricAnimationOnboarding(db: db),
+      // home: ConcentricAnimationOnboarding(db: db),
+      initialRoute: '/sign-in',
+      routes: {
+        '/sign-in': (context) {
+          return SignInScreen(
+            providers: providers,
+            actions: [
+              AuthStateChangeAction<SignedIn>((context, state) {
+                // Navigator.pushReplacementNamed(context, '/user');
+                Navigator.pushReplacementNamed(context, '/onboarding');
+              }),
+            ],
+          );
+        },
+        '/user' : (context) => const UserPage(),
+        '/onboarding': (context) => ConcentricAnimationOnboarding(db: db), 
+      },
     );
   }
 }
