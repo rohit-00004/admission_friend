@@ -1,6 +1,6 @@
 import 'package:admission_friend/database/dbhelper.dart';
 import 'package:admission_friend/home.dart';
-import 'package:admission_friend/screens/details/state_level_details.dart';
+import 'package:admission_friend/screens/details/college_details.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/simple_list.dart';
@@ -24,9 +24,6 @@ class _AllLevelState extends State<AllLevel> {
   @override
   void initState() {
     db = widget.db;
-    // db = DatabaseHelper();  
-    // db.insertStatelevel();
-    // db.insertcolleges();
     super.initState();
   }
 
@@ -74,12 +71,6 @@ class _AllLevelState extends State<AllLevel> {
           ),
           const SizedBox(height: 5,),
       
-          // ElevatedButton(onPressed: (){
-          //   // db.insertTxn();
-          //   // db.insertcolleges();
-          //   db.readtable(90, ['Male', 'Open'], "home_to_home");
-          // }, 
-          // child: const Text('read table')),
       
           const Divider(height: 10, thickness: 1, color: Colors.black,),
           const SizedBox(height: 5,),
@@ -89,9 +80,6 @@ class _AllLevelState extends State<AllLevel> {
             builder: ((context, snapshot) {
               
               if(snapshot.hasData){
-                // setState(() {});
-                // print("selections: $selections");
-                print("table: ${widget.table}");
                 return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: ListView.separated(
@@ -292,12 +280,6 @@ class _AllLevelState extends State<AllLevel> {
           }))
         ],),
       ), 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {});
-        },
-        child: Icon(Icons.refresh),
-      ),
     );
   }
 

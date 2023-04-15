@@ -9,8 +9,7 @@ import 'package:flutter/material.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   //  WidgetsFlutterBinding.ensureInitialized();
- await Firebase.initializeApp(
- );
+ await Firebase.initializeApp();
   runApp( MyApp());
 }
 
@@ -50,6 +49,16 @@ class MyApp extends StatelessWidget {
               AuthStateChangeAction<SignedIn>((context, state) {
                 // Navigator.pushReplacementNamed(context, '/user');
                 Navigator.pushReplacementNamed(context, '/onboarding');
+              }),
+            ],
+          );
+        },
+        '/profile': (context) {
+          return ProfileScreen(
+            providers: providers,
+            actions: [
+              SignedOutAction((context) {
+                Navigator.pushReplacementNamed(context, '/sign-in');
               }),
             ],
           );

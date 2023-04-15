@@ -1,5 +1,4 @@
 import 'package:admission_friend/screens/all_list.dart';
-import 'package:admission_friend/screens/home_to_home_list.dart';
 import 'package:admission_friend/screens/state_level_list.dart';
 import 'package:flutter/material.dart';
 

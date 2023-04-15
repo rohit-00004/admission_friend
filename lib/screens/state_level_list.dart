@@ -1,6 +1,6 @@
 import 'package:admission_friend/database/dbhelper.dart';
 import 'package:admission_friend/home.dart';
-import 'package:admission_friend/screens/details/state_level_details.dart';
+import 'package:admission_friend/screens/details/college_details.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/simple_list.dart';
