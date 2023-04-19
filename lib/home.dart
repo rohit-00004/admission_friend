@@ -1,20 +1,34 @@
+import 'package:admission_friend/database/dbhelper.dart';
 import 'package:admission_friend/screens/college_list.dart';
+import 'package:admission_friend/screens/pdf_view.dart';
 import 'package:flutter/material.dart';
+import 'package:pdfx/pdfx.dart';
 
 List<String> selections = ["Male", "OPEN"];
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final DatabaseHelper db;
+  const HomePage({required this.db, super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
   final _formKey = GlobalKey<FormState>();
   final List<String> _gender = ['Male', 'Female'];
-  final List<String> _category = ['OPEN', 'OBC', 'SC', 'VJ', 'ST', 'NT1', 'NT2', 'NTT3', 'EWS', 'TFWS'];
+  final List<String> _category = [
+    'OPEN',
+    'OBC',
+    'SC',
+    'VJ',
+    'ST',
+    'NT1',
+    'NT2',
+    'NTT3',
+    'EWS',
+    'TFWS'
+  ];
   TextEditingController rankcontroller = TextEditingController();
 
   @override
@@ -23,34 +37,129 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  // Widget pdfView() => PdfView(
+  //   controller: pdfController,
+  // );
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Admission friend' ),
-          centerTitle: true,
+        title: const Text('Admission friend'),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
+      drawer: SafeArea(
+        child: Drawer(
+          width: MediaQuery.of(context).size.width * .7,
           backgroundColor: Theme.of(context).primaryColor,
+          child: DrawerHeader(
+            child: Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/profile');
+                  },
+                  child: drawerField(
+                      const Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                      'My Profile'),
+                ),
+
+                // const Divider(thickness: .8, color: Colors.white,),
+                drawerField(null, 'Cutoff for 2021-22'),
+                const Divider(
+                  thickness: .8,
+                  color: Colors.white,
+                ),
+                InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const Pdfview(
+                              filepath:
+                                  'assets/pdfs/2021ENGG_CAP1_CutOff.pdf')));
+                    },
+                    child: drawerField(
+                        const Icon(
+                          Icons.picture_as_pdf_outlined,
+                          color: Colors.white,
+                        ),
+                        'CAP I')),
+                InkWell(
+                    onTap: () {
+                       Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const Pdfview(
+                              filepath:
+                                  'assets/pdfs/2021ENGG_CAP2_CutOff.pdf')));
+                    },
+                    child: drawerField(
+                        const Icon(
+                          Icons.picture_as_pdf_outlined,
+                          color: Colors.white,
+                        ),
+                        'CAP II')),
+                
+
+                // const Divider(thickness: .8, color: Colors.white,),
+                drawerField(null, 'Cutoff for 2020-21'),
+                const Divider(
+                  thickness: .8,
+                  color: Colors.white,
+                ),
+                InkWell(
+                  onTap: () {
+                     Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const Pdfview(
+                              filepath:
+                                  'assets/pdfs/2020ENGG_CAP1_CutOff.pdf')));
+                  },
+                    child: drawerField(
+                        const Icon(
+                          Icons.picture_as_pdf_outlined,
+                          color: Colors.white,
+                        ),
+                        'CAP I')),
+                InkWell(
+                  onTap: () {
+                     Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const Pdfview(
+                              filepath:
+                                  'assets/pdfs/2020ENGG_CAP2_CutOff.pdf')));
+                  },
+                    child: drawerField(
+                        const Icon(
+                          Icons.picture_as_pdf_outlined,
+                          color: Colors.white,
+                        ),
+                        'CAP II')),
+               
+              ],
+            ),
+          ),
         ),
-        
-      body: Center(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children:  [
-            SizedBox(height: size.height*.03,),
-            Container(
-              width: size.width*.5,
-              decoration: BoxDecoration(
-                border: Border.all(width: 2),
-                borderRadius: BorderRadius.circular(8)),
-              child:  Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Form(
+            key: _formKey,
+            child: Column(children: [
+              SizedBox(
+                height: size.height * .03,
+              ),
+              Container(
+                width: size.width * .5,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 2),
+                    borderRadius: BorderRadius.circular(8)),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: TextFormField(
                     controller: rankcontroller,
                     validator: (value) {
-                      if(int.tryParse(value!) == null){
+                      if (int.tryParse(value!) == null) {
                         return "Enter a valid rank";
                       }
                       return null;
@@ -61,42 +170,64 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-            ),
-            SizedBox(height: size.height*.05,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(
-                  width: size.width*.3,
-                  child: DropdownSelection(options: _gender, selected: 'Male'),
+              ),
+              SizedBox(
+                height: size.height * .05,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    width: size.width * .3,
+                    child:
+                        DropdownSelection(options: _gender, selected: 'Male'),
+                  ),
+                  SizedBox(
+                    width: size.width * .3,
+                    child:
+                        DropdownSelection(options: _category, selected: 'OPEN'),
+                  ),
+                ],
+              ),
+              SizedBox(height: size.height * .1),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: const StadiumBorder(),
+                  side: const BorderSide(width: 2, color: Colors.green),
                 ),
-                SizedBox(
-                  width: size.width*.3,
-                  child: DropdownSelection(options: _category, selected: 'OPEN'),
-                ),
-              ],
-            ),
-            SizedBox(height: size.height*.1),
-            OutlinedButton(
-              // style: outlineButtonStyle,
-              style: OutlinedButton.styleFrom(
-                shape: const StadiumBorder(),
-                side: const BorderSide(
-                  width: 2,
-                  color: Colors.green
-                ),
-              ),  
-              onPressed: () {
-                if(_formKey.currentState!.validate()){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) =>   CollegeList(rank: int.parse(rankcontroller.text), selections: selections,)));
-                }
-               },
-              child: const Text('Submit'),
-            )
-            // const SimpleDropDown(),
-          ]),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CollegeList(
+                                  rank: int.parse(rankcontroller.text),
+                                  selections: selections,
+                                  db: widget.db,
+                                )));
+                  }
+                },
+                child: const Text('Submit'),
+              ),
+              Container(
+                  height: 300,
+                  child: Image.asset('assets/images/students_09.jpg',
+                      fit: BoxFit.fitWidth)),
+              // const SimpleDropDown(),
+            ]),
+          ),
         ),
-      ),      
+      ),
+    );
+  }
+
+  ListTile drawerField(Icon? icon, String text) {
+    return ListTile(
+      leading: icon,
+      title: Text(
+        text,
+        style: const TextStyle(color: Colors.white),
+      ),
     );
   }
 }
@@ -104,14 +235,14 @@ class _HomePageState extends State<HomePage> {
 class DropdownSelection extends StatefulWidget {
   final List<String> options;
   final String selected;
-  const DropdownSelection({required this.options, required this.selected, super.key});
+  const DropdownSelection(
+      {required this.options, required this.selected, super.key});
 
   @override
   State<DropdownSelection> createState() => _MyWidgetState();
 }
 
 class _MyWidgetState extends State<DropdownSelection> {
-
   late List<String> options;
   late String selected;
   late int idx;
@@ -121,10 +252,11 @@ class _MyWidgetState extends State<DropdownSelection> {
     options = widget.options;
     selected = widget.selected;
 
-    if(selected == "Male"){
+    if (selected == "Male") {
       idx = 0;
+    } else {
+      idx = 1;
     }
-    else {idx = 1;}
     super.initState();
   }
 
@@ -133,9 +265,8 @@ class _MyWidgetState extends State<DropdownSelection> {
     return DropdownButtonHideUnderline(
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(width: 2),
-          borderRadius: BorderRadius.circular(8)
-        ),
+            border: Border.all(width: 2),
+            borderRadius: BorderRadius.circular(8)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: DropdownButton<String>(

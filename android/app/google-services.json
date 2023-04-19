@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1013764669338",
+    "project_id": "admission-friend",
+    "storage_bucket": "admission-friend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013764669338:android:e781ac63cab0f7e4b68423",
+        "android_client_info": {
+          "package_name": "com.example.admission_friend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1013764669338-vn6o5r5ga8pumfhl3ui4pp7r20e9hcd3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtnCLZ8p8lqcXuah6VlL5gkDAviksfovY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1013764669338-vn6o5r5ga8pumfhl3ui4pp7r20e9hcd3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,30 +1,33 @@
 import 'package:admission_friend/database/dbhelper.dart';
 import 'package:admission_friend/home.dart';
-import 'package:admission_friend/screens/details/state_level_details.dart';
+import 'package:admission_friend/screens/details/college_details.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/simple_list.dart';
 
 
-class StateLevel extends StatefulWidget {
+class AllLevel extends StatefulWidget {
   final int rank;
   final List<String> selections;
-  const StateLevel({required this.rank, required this.selections, super.key});
+  final String table;
+  final DatabaseHelper db;
+  const AllLevel({required this.rank, required this.selections, required this.table,  required this.db, super.key});
 
   @override
-  State<StateLevel> createState() => _StateLevelState();
+  State<AllLevel> createState() => _AllLevelState();
 }
 
-class _StateLevelState extends State<StateLevel> {
+class _AllLevelState extends State<AllLevel> {
 
   late DatabaseHelper db;
+
   @override
   void initState() {
-    db = DatabaseHelper();
-    db.insertTxn();
-    db.insertcolleges();
+    db = widget.db;
     super.initState();
   }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,30 +53,33 @@ class _StateLevelState extends State<StateLevel> {
                       ),
                     ],
                   ),
-                  child: const Padding(
-                    padding:  EdgeInsets.all(8.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Align(
                       alignment: Alignment.center,
-                      child: Text('State level seats', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),)),
+                      child: widget.table == "state_level" ?  
+                       Text('State level seats', style: seattypeStyle(),) :
+                       widget.table == 'home_to_home' ?
+                       Text('Home University Seats alloted to Home University Students', style: seattypeStyle(),) : 
+                       widget.table == "other_to_other" ?
+                       Text('Other than Home University Seats alloted to Other than Home University Students', style: seattypeStyle(),) : 
+                       Text('Home University seats alloted to Other than Home University Students', style: seattypeStyle(),),
+                       ), 
                   )),
               ),
             ],
           ),
-          const SizedBox(height: 10,),
+          const SizedBox(height: 5,),
       
-          // ElevatedButton(onPressed: (){
-          //   db.insertTxn();
-          //   db.insertcolleges();
-          // }, 
-          // child: const Text('insert db')),
       
           const Divider(height: 10, thickness: 1, color: Colors.black,),
+          const SizedBox(height: 5,),
       
-          FutureBuilder(
-            future: db.readstatelevel(widget.rank, widget.selections),
+          FutureBuilder<List<dynamic>>(
+            future: db.readtable(widget.rank, widget.selections, widget.table),
             builder: ((context, snapshot) {
+              
               if(snapshot.hasData){
-                // print("selections: $selections");
                 return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: ListView.separated(
@@ -85,71 +91,139 @@ class _StateLevelState extends State<StateLevel> {
                       shrinkWrap: true,
                       itemCount: snapshot.data!.length,
                       itemBuilder: ((context, index) {
-                        // here show for selected category 
+                        // here show for selected category
+                        var out = snapshot.data![index];
+                        String table = widget.table;
                         int? score;
                         switch (selections[1]) {
                           case 'OPEN':
                             if(selections[0] == 'Male'){
-                              score = snapshot.data![index].gopens;
+                              table == "state_level" ?
+                              score = snapshot.data![index].gopens : 
+                              table == "home_to_home" ?
+                              score = out.gopenh :
+                              score = out.gopeno; 
                             }
                             else {
-                              score = snapshot.data![index].lopens;
+                              table == "state_level" ?
+                              score = snapshot.data![index].lopens : 
+                              table == "home_to_home" ?
+                              score = out.lopenh :
+                              score = out.lopeno; 
                             }
                             break;
+
                           case 'OBC':
                             if(selections[0] == 'Male'){
-                              score = snapshot.data![index].gobcs;
+                              table == "state_level" ?
+                              score = snapshot.data![index].gobcs : 
+                              table == "home_to_home" ?
+                              score = out.gobch :
+                              score = out.gobco ; 
                             }
                             else {
-                              score = snapshot.data![index].lobcs;
+                              table == "state_level" ?
+                              score = snapshot.data![index].lobcs : 
+                              table == "home_to_home" ?
+                              score = out.lobch :
+                              score = out.lobco; 
                             }
                             break;
                           case 'SC':
                             if(selections[0] == 'Male'){
-                              score = snapshot.data![index].gscs;
+                              table == "state_level" ?
+                              score = snapshot.data![index].gscs : 
+                              table == "home_to_home" ?
+                              score = out.gsch :
+                              score = out.gsco;
                             }
                             else {
-                              score = snapshot.data![index].lscs;
+                              table == "state_level" ?
+                              score = snapshot.data![index].lscs : 
+                              table == "home_to_home" ?
+                              score = out.lsch :
+                              score = out.lsco; 
                             }
                             break;
                           case 'VJ':
                             if(selections[0] == 'Male'){
-                              score = snapshot.data![index].gvjs;
+                              table == "state_level" ?
+                              score = snapshot.data![index].gvjs : 
+                              table == "home_to_home" ?
+                              score = out.gvjh :
+                              score = out.gvjo; 
                             }
                             else {
-                              score = snapshot.data![index].lvjs;
+                              table == "state_level" ?
+                              score = snapshot.data![index].lvjs : 
+                              table == "home_to_home" ?
+                              score = out.lvjh :
+                              score = out.lvjo ;
                             }
                             break;
                           case 'ST':
                             if(selections[0] == 'Male'){
-                              score = snapshot.data![index].gsts;
+                              table == "state_level" ?
+                              score = snapshot.data![index].gsts : 
+                              table == "home_to_home" ?
+                              score = out.gsth :
+                              score = out.gsto; 
                             }
                             else {
-                              score = snapshot.data![index].lsts;
+                              table == "state_level" ?
+                              score = snapshot.data![index].lsts : 
+                              table == "home_to_home" ?
+                              score = out.lsth :
+                              score = out.lsto; 
                             }
                             break;
                           case 'NT1':
                             if(selections[0] == 'Male'){
-                              score = snapshot.data![index].gnt1s;
+                              table == "state_level" ?
+                              score = snapshot.data![index].gnt1s : 
+                              table == "home_to_home" ?
+                              score = out.gnt1h :
+                              score = out.gnt1o; 
                             }
                             else {
-                              score = snapshot.data![index].lnt1s;
+                              table == "state_level" ?
+                              score = snapshot.data![index].lnt1s : 
+                              table == "home_to_home" ?
+                              score = out.lnt1h :
+                              score = out.lnt1o ; 
                             }
                             break;
                           case 'NT2':
                             if(selections[0] == 'Male'){
-                              score = snapshot.data![index].gnt2s;
+                              table == "state_level" ?
+                              score = snapshot.data![index].gnt2s : 
+                              table == "home_to_home" ?
+                              score = out.gnt2h :
+                              score = out.gnt2o;
                             }
                             else {
-                              score = snapshot.data![index].lnt3;
+                              table == "state_level" ?
+                              score = snapshot.data![index].lnt2s : 
+                              table == "home_to_home" ?
+                              score = out.lnt2h :
+                              score = out.lnt2o ; 
                             }
                             break;
+
                           case 'NT3':
                             if(selections[0] == 'Male'){
-                              score = snapshot.data![index].gnt3s;
+                              table == "state_level" ?
+                              score = snapshot.data![index].gnt3s : 
+                              table == "home_to_home" ?
+                              score = out.gnt3h :
+                              score = out.gnt3o ;
                             }
                             else {
-                              score = snapshot.data![index].lnt3;
+                              table == "state_level" ?
+                              score = snapshot.data![index].lnt3s : 
+                              table == "home_to_home" ?
+                              score = out.lnt3h :
+                              score = out.lnt3o; 
                             }
                             break;
 
@@ -157,7 +231,7 @@ class _StateLevelState extends State<StateLevel> {
                             break;
                         }
 
-                        if(selections[1] == 'EWS'){
+                        if(selections[1] == 'EWS'){                          
                             score = snapshot.data![index].ews;
                         }
                         if(selections[1] == 'TFWS'){
@@ -205,7 +279,9 @@ class _StateLevelState extends State<StateLevel> {
               return const CircularProgressIndicator();
           }))
         ],),
-      )
+      ), 
     );
   }
+
+  TextStyle seattypeStyle() => const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic);
 }

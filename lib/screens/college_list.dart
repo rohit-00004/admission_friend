@@ -1,10 +1,15 @@
-import 'package:admission_friend/screens/state_level.dart';
+import 'package:admission_friend/screens/all_list.dart';
+import 'package:admission_friend/screens/state_level_list.dart';
 import 'package:flutter/material.dart';
+
+import '../database/dbhelper.dart';
 
 class CollegeList extends StatelessWidget {
   final int rank;
   final List<String> selections;
-  CollegeList({required this.rank, required this.selections, super.key});
+
+  final DatabaseHelper db;
+  CollegeList({required this.rank, required this.selections, required this.db, super.key});
 
   final pages =  [
     // Icon(Icons.directions_car),
@@ -42,10 +47,15 @@ class CollegeList extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            StateLevel(rank: rank, selections: selections,),
-            const Icon(Icons.directions_transit),
-            const Icon(Icons.directions_bike),
-            const Icon(Icons.directions_boat),
+            // StateLevel(rank: rank, selections: selections, db: db),
+            AllLevel(rank: rank, selections: selections, table: 'state_level', db: db),
+            AllLevel(rank: rank, selections: selections, table: "home_to_home", db: db,),
+            AllLevel(rank: rank, selections: selections, table: "other_to_other", db: db,),
+            // const Icon(Icons.directions_transit),
+            // const Icon(Icons.directions_bike),
+            AllLevel(rank: rank, selections: selections, table: "other_to_home", db: db)
+            // const Icon(Icons.directions_boat),
+            // HometoHomeList(rank: rank, selections: selections, db: db)
           ]
         ),
         // body: 

@@ -1,3 +1,4 @@
+import 'package:admission_friend/database/dbhelper.dart';
 import 'package:admission_friend/home.dart';
 import 'package:concentric_transition/concentric_transition.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,8 @@ final pages = [
 ];
 
 class ConcentricAnimationOnboarding extends StatelessWidget {
-  const ConcentricAnimationOnboarding({Key? key}) : super(key: key);
+  final DatabaseHelper db;
+  const ConcentricAnimationOnboarding({required this.db, Key? key}) : super(key: key);
  
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,7 @@ class ConcentricAnimationOnboarding extends StatelessWidget {
             // completed = true;
             WidgetsBinding.instance.addPostFrameCallback((_) {
              Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) {
-                return const HomePage();
+                return HomePage(db: db,);
               }));
             });
             // return const HomePage();
