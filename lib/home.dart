@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                         'CAP I')),
                 InkWell(
                     onTap: () {
-                       Navigator.of(context).push(MaterialPageRoute(
+                      Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const Pdfview(
                               filepath:
                                   'assets/pdfs/2021ENGG_CAP2_CutOff.pdf')));
@@ -101,7 +101,6 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.white,
                         ),
                         'CAP II')),
-                
 
                 // const Divider(thickness: .8, color: Colors.white,),
                 drawerField(null, 'Cutoff for 2020-21'),
@@ -110,12 +109,12 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white,
                 ),
                 InkWell(
-                  onTap: () {
-                     Navigator.of(context).push(MaterialPageRoute(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const Pdfview(
                               filepath:
                                   'assets/pdfs/2020ENGG_CAP1_CutOff.pdf')));
-                  },
+                    },
                     child: drawerField(
                         const Icon(
                           Icons.picture_as_pdf_outlined,
@@ -123,19 +122,18 @@ class _HomePageState extends State<HomePage> {
                         ),
                         'CAP I')),
                 InkWell(
-                  onTap: () {
-                     Navigator.of(context).push(MaterialPageRoute(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => const Pdfview(
                               filepath:
                                   'assets/pdfs/2020ENGG_CAP2_CutOff.pdf')));
-                  },
+                    },
                     child: drawerField(
                         const Icon(
                           Icons.picture_as_pdf_outlined,
                           color: Colors.white,
                         ),
                         'CAP II')),
-               
               ],
             ),
           ),
